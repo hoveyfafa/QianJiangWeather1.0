@@ -105,6 +105,7 @@ public class ChooseAreaFragment extends Fragment {
                 }
             }
         });
+        queryProvinces();
     }
     private void queryProvinces(){
         titleText.setText("China");

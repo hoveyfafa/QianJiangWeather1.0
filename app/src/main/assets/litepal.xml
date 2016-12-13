@@ -5,9 +5,9 @@
     <version value = "1"/>
 
     <list>
-        <mapping class = "com.qianjiangweatehr.android.model.ProvinceModel"/>
-        <mapping class = "com.qianjiangweatehr.android.model.CountyModel"/>
-        <mapping class = "com.qianjiangweatehr.android.model.CityModel"/>
+        <mapping class = "com.example.huangjiahao.qianjiangweather.model.ProvinceModel"/>
+        <mapping class = "com.example.huangjiahao.qianjiangweather.model.CountyModel"/>
+        <mapping class = "com.example.huangjiahao.qianjiangweather.model.CityModel"/>
     </list>
 
     </litepal>
