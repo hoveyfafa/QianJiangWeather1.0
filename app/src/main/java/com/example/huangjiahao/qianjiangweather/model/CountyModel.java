@@ -1,12 +1,17 @@
 package com.example.huangjiahao.qianjiangweather.model;
 
+import org.litepal.crud.DataSupport;
+
 /**
  * Created by JiaHao.H on 2016/12/3.
  */
-public class CountyModel {
+public class CountyModel extends DataSupport {
     private int id;
+
     private String countyName;
-    private String countyCode;
+
+    private int weatherId;
+
     private int cityId;
 
     public int getId() {
@@ -25,12 +30,12 @@ public class CountyModel {
         this.countyName = countyName;
     }
 
-    public String getCountyCode() {
-        return countyCode;
+    public int getWeatherId() {
+        return weatherId;
     }
 
-    public void setCountyCode(String countyCode) {
-        this.countyCode = countyCode;
+    public void setWeatherId(int weatherId) {
+        this.weatherId = weatherId;
     }
 
     public int getCityId() {
