@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.example.huangjiahao.qianjiangweather.model.CityModel;
 import com.example.huangjiahao.qianjiangweather.model.CountyModel;
 import com.example.huangjiahao.qianjiangweather.model.ProvinceModel;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +16,8 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import gson.Weather;
 
 /**
  * Created by JiaHao.H on 2016/12/4.
@@ -29,7 +32,7 @@ public class Utility {
                 JSONObject provinceObject = allProvinces.getJSONObject(i);
                 ProvinceModel province = new ProvinceModel();
                 province.setProvinceName(provinceObject.getString("name"));
-                province.setProvinceCode(provinceObject.getInt("Id"));
+                province.setProvinceCode(provinceObject.getInt("id"));
                 province.save();
             }
             return true;
@@ -48,7 +51,7 @@ public class Utility {
                     JSONObject cityObject = allCities.getJSONObject(i);
                     CityModel city = new CityModel();
                     city.setCiytName(cityObject.getString("name"));
-                    city.setCityCode(cityObject.getInt("Id"));
+                    city.setCityCode(cityObject.getInt("id"));
                     city.setProvinceId(provinceId);
                     city.save();
                 }
@@ -68,7 +71,7 @@ public class Utility {
                     JSONObject countyObject = allCounties.getJSONObject(i);
                     CountyModel county = new CountyModel();
                     county.setCountyName(countyObject.getString("name"));
-                    county.setWeatherId(countyObject.getInt("Id"));
+                    county.setWeatherId(countyObject.getString("weather_id"));
                     county.setCityId(cityId);
                     county.save();
                 }
@@ -112,4 +115,16 @@ public class Utility {
 //        editor.putString("current_date",simpleDateFormat.format(new Date()));
 //        editor.commit();
 //    }
+
+    public static Weather handleWeatherResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent, Weather.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

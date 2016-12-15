@@ -2,6 +2,7 @@ package com.example.huangjiahao.qianjiangweather.fragment;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.huangjiahao.qianjiangweather.R;
+import com.example.huangjiahao.qianjiangweather.activity.WeatherActivity;
 import com.example.huangjiahao.qianjiangweather.model.CityModel;
 import com.example.huangjiahao.qianjiangweather.model.CountyModel;
 import com.example.huangjiahao.qianjiangweather.model.ProvinceModel;
@@ -92,6 +94,12 @@ public class ChooseAreaFragment extends Fragment {
                 } else if (currentLevel == LEVEL_CITY) {
                     selectedCity = cityModelsList.get(position);
                     queryCounties();
+                }else if (currentLevel == LEVEL_COUNTY){
+                    String weatherId = countyModelList.get(position).getWeatherId();
+                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                    intent.putExtra("weather_id",weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -138,7 +146,7 @@ public class ChooseAreaFragment extends Fragment {
             currentLevel = LEVEL_CITY;
         }else {
             int provinceCode = selectedProvince.getProvinceCode();
-            String address = "http://guolin.tech/api/china" + "/" + provinceCode;
+            String address = "http://guolin.tech/api/china/" + provinceCode;
             queryFromServer(address,"city");
         }
     }
@@ -146,7 +154,7 @@ public class ChooseAreaFragment extends Fragment {
         titleText.setText(selectedCity.getCiytName());
         backButton.setVisibility(View.VISIBLE);
         countyModelList = DataSupport.where("cityid = ?",String.valueOf(selectedCity.getId())).find(CountyModel.class);
-        if (cityModelsList.size() > 0){
+        if (countyModelList.size() > 0){
             dataList.clear();
             for (CountyModel county : countyModelList){
                 dataList.add(county.getCountyName());
@@ -157,7 +165,7 @@ public class ChooseAreaFragment extends Fragment {
         }else {
             int provinceCode = selectedProvince.getProvinceCode();
             int cityCode = selectedCity.getCityCode();
-            String address = "http://guolin.tech/api/china" + "/" + provinceCode + "/"+ cityCode;
+            String address = "http://guolin.tech/api/china/" + provinceCode + "/"+ cityCode;
             queryFromServer(address,"county");
 
         }
