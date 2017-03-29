@@ -3,6 +3,7 @@ package com.example.huangjiahao.qianjiangweather.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.huangjiahao.qianjiangweather.bean.UserBean;
 import com.example.huangjiahao.qianjiangweather.constans.Const;
 import com.google.gson.Gson;
 

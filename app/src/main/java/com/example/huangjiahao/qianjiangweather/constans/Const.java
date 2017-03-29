@@ -2,6 +2,8 @@ package com.example.huangjiahao.qianjiangweather.constans;
 
 import android.content.SharedPreferences;
 
+import com.example.huangjiahao.qianjiangweather.safe.AppSafeHelper;
+
 /**
  * Created by JH.H on 2017/3/28.
  */

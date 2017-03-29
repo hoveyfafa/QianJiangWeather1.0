@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 
 import com.example.huangjiahao.qianjiangweather.R;
 import com.example.huangjiahao.qianjiangweather.activity.MainActivity;
+import com.example.huangjiahao.qianjiangweather.util.SPUtils;
 
 /**
  * Created by JH.H on 2017/3/28.
