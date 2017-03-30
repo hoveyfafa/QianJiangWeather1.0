@@ -45,15 +45,15 @@ public class ChooseAreaFragment extends Fragment {
 
     public static final int LEVEL_COUNTY = 2;
 
-    private ProgressDialog progressDialog;
+    private ProgressDialog mPdProgress;
 
-    private TextView titleText;
+    private TextView mTvTitle;
 
-    private Button backButton;
+    private Button mBtnBack;
 
-    private ListView listView;
+    private ListView mListView;
 
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> mAdapter;
 
     private List<String> dataList = new ArrayList<>();
 
@@ -74,19 +74,19 @@ public class ChooseAreaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_choose_area,container,false);
-        titleText = (TextView) view.findViewById(R.id.title_text);
-        backButton = (Button) view.findViewById(R.id.back_button);
-        listView = (ListView) view.findViewById(R.id.list_view);
+        mTvTitle = (TextView) view.findViewById(R.id.title_text);
+        mBtnBack = (Button) view.findViewById(R.id.back_button);
+        mListView = (ListView) view.findViewById(R.id.list_view);
 //        ----------------
-        adapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_list_item_1,dataList);
-        listView.setAdapter(adapter);
+        mAdapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_list_item_1,dataList);
+        mListView.setAdapter(mAdapter);
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (currentLevel == LEVEL_PROVINCE) {
@@ -112,7 +112,7 @@ public class ChooseAreaFragment extends Fragment {
                 }
             }
         });
-        backButton.setOnClickListener(new View.OnClickListener() {
+        mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (currentLevel == LEVEL_COUNTY) {
@@ -125,16 +125,16 @@ public class ChooseAreaFragment extends Fragment {
         queryProvinces();
     }
     private void queryProvinces(){
-        titleText.setText("China");
-        backButton.setVisibility(View.GONE);
+        mTvTitle.setText("China");
+        mBtnBack.setVisibility(View.GONE);
         provinceModelList = DataSupport.findAll(ProvinceModel.class);
         if (provinceModelList.size() > 0){
             dataList.clear();
             for (ProvinceModel province : provinceModelList){
                 dataList.add(province.getProvinceName());
             }
-            adapter.notifyDataSetChanged();
-            listView.setSelection(0);
+            mAdapter.notifyDataSetChanged();
+            mListView.setSelection(0);
             currentLevel = LEVEL_PROVINCE;
         }else {
             String address = "http://guolin.tech/api/china";
@@ -142,16 +142,16 @@ public class ChooseAreaFragment extends Fragment {
         }
     }
     private void queryCities(){
-        titleText.setText(selectedProvince.getProvinceName());
-        backButton.setVisibility(View.VISIBLE);
+        mTvTitle.setText(selectedProvince.getProvinceName());
+        mBtnBack.setVisibility(View.VISIBLE);
         cityModelsList = DataSupport.where("provinceid = ?",String.valueOf(selectedProvince.getId())).find(CityModel.class);
         if (cityModelsList.size() > 0){
             dataList.clear();
             for (CityModel city : cityModelsList){
                 dataList.add(city.getCiytName());
             }
-            adapter.notifyDataSetChanged();
-            listView.setSelection(0);
+            mAdapter.notifyDataSetChanged();
+            mListView.setSelection(0);
             currentLevel = LEVEL_CITY;
         }else {
             int provinceCode = selectedProvince.getProvinceCode();
@@ -160,16 +160,16 @@ public class ChooseAreaFragment extends Fragment {
         }
     }
     private void queryCounties(){
-        titleText.setText(selectedCity.getCiytName());
-        backButton.setVisibility(View.VISIBLE);
+        mTvTitle.setText(selectedCity.getCiytName());
+        mBtnBack.setVisibility(View.VISIBLE);
         countyModelList = DataSupport.where("cityid = ?",String.valueOf(selectedCity.getId())).find(CountyModel.class);
         if (countyModelList.size() > 0){
             dataList.clear();
             for (CountyModel county : countyModelList){
                 dataList.add(county.getCountyName());
             }
-            adapter.notifyDataSetChanged();
-            listView.setSelection(0);
+            mAdapter.notifyDataSetChanged();
+            mListView.setSelection(0);
             currentLevel = LEVEL_COUNTY;
         }else {
             int provinceCode = selectedProvince.getProvinceCode();
@@ -224,16 +224,16 @@ public class ChooseAreaFragment extends Fragment {
         });
     }
     private void showProgressDialog(){
-        if (progressDialog == null){
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setMessage("正在加载...");
-            progressDialog.setCanceledOnTouchOutside(false);
+        if (mPdProgress == null){
+            mPdProgress = new ProgressDialog(getActivity());
+            mPdProgress.setMessage("正在加载...");
+            mPdProgress.setCanceledOnTouchOutside(false);
         }
-        progressDialog.show();
+        mPdProgress.show();
     }
     private void closeProgressDialog(){
-        if (progressDialog != null){
-            progressDialog.dismiss();
+        if (mPdProgress != null){
+            mPdProgress.dismiss();
         }
     }
 }
