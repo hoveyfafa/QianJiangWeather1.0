@@ -23,7 +23,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/tab_job"
+            android:id="@+id/tab_weather"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -31,17 +31,17 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/tab_job_image"
+                android:id="@+id/tab_weather_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/job_selector"/>
+                android:src="@drawable/weather_selector"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="寻职"
+                android:text="天气"
                 android:textColor="@color/tab_text_color"
                 android:textSize="@dimen/text_font_small" />
 
