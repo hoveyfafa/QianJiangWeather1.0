@@ -17,13 +17,10 @@ import android.widget.Toast;
 
 import com.example.huangjiahao.qianjiangweather.MyApplication;
 import com.example.huangjiahao.qianjiangweather.R;
-import com.example.huangjiahao.qianjiangweather.activity.MainActivity;
-import com.example.huangjiahao.qianjiangweather.activity.WeatherActivity;
 import com.example.huangjiahao.qianjiangweather.model.CityModel;
 import com.example.huangjiahao.qianjiangweather.model.CountyModel;
 import com.example.huangjiahao.qianjiangweather.model.ProvinceModel;
 import com.example.huangjiahao.qianjiangweather.util.HttpUtil;
-import com.example.huangjiahao.qianjiangweather.util.SPUtils;
 import com.example.huangjiahao.qianjiangweather.util.Utility;
 
 import org.litepal.crud.DataSupport;

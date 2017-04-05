@@ -6,8 +6,9 @@ package com.example.huangjiahao.qianjiangweather.request;
  */
 public class RequestUrl {
 
-//   测试环境
-    public static final String IP = "http://192.168.1.17:8080/front/";
+//   和风IP
+    public static final String IP = "https://free-api.heweather.com/v5/";
 
+    public static final String WEATHER = "weather";
 
 }

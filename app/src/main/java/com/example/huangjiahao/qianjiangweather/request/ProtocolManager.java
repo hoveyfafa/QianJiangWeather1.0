@@ -1,9 +1,13 @@
 package com.example.huangjiahao.qianjiangweather.request;
 
 import com.example.huangjiahao.qianjiangweather.MyApplication;
-import com.example.huangjiahao.qianjiangweather.constans.Const;
-import com.example.huangjiahao.qianjiangweather.util.SettingUtils;
+import com.example.huangjiahao.qianjiangweather.util.MD5Utils;
 import com.example.huangjiahao.qianjiangweather.util.Utils;
+import com.example.xiaoping.okhttputil.OkHttpUtils;
+import com.example.xiaoping.okhttputil.builder.OkHttpRequestBuilder;
+import com.example.xiaoping.okhttputil.builder.PostFormBuilder;
+import com.example.xiaoping.okhttputil.callback.StringCallback;
+import com.example.xiaoping.okhttputil.request.RequestCall;
 
 import java.io.File;
 import java.util.HashMap;
@@ -52,7 +56,7 @@ public class ProtocolManager {
     public void request(Map<String, String> params, String url, final ReponseCallback reponseCallback) {
         request(params, url, reponseCallback, HttpMethod.POST);
     }
-    String userId;
+
     public void request(Map<String, String> params, String url, final ReponseCallback reponseCallback, HttpMethod httpMethod) {
         if (!Utils.isNetworkConnected(MyApplication.getInstance())) {
             reponseCallback.fail("请检查网络连接");
@@ -61,17 +65,8 @@ public class ProtocolManager {
         if (params == null) {
             params = new HashMap<>();
         }
-        params.put("token", SettingUtils.getDeciceId(MyApplication.getInstance()));
-        params.put("sign", Const.sign);
-        params.put("stime", Const.stime);
-        params.put("version", Utils.getVersion());
-        params.put("appType", "ANDROID");
-        if (!MyApplication.getInstance().isLogin()){
-
-            params.put("userId", MyApplication.getInstance().getSignUserId());
-        }else {
-            params.put("userId", MyApplication.getInstance().getUserId());
-        }
+//        和风Key
+        params.put("key","c6fa13bc8e2d4c3abf60751d669e22db");
 
         Map<String, String> headers = new HashMap<>();
 

@@ -26,6 +26,8 @@ import com.example.huangjiahao.qianjiangweather.util.HttpUtil;
 import com.example.huangjiahao.qianjiangweather.util.Utility;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import gson.Forecast;
 import gson.Weather;
@@ -52,6 +54,7 @@ public class WeatherFragment extends BaseFragment implements View.OnClickListene
     public SwipeRefreshLayout swipeRefresh;
     public DrawerLayout drawerLayout;
     private Button mBtnNav;
+    private Map<String,String> params = new HashMap<>();
     @Override
     protected int setLayout() {
         return R.layout.fragment_weather;
