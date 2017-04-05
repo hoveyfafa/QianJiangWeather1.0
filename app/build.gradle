@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.huangjiahao.qianjiangweather"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -31,5 +31,9 @@ dependencies {
     compile files('libs/commons-io-1.3.2.jar')
     compile files('libs/SmartAndroid2.0.jar')
     compile files('libs/AndroidSwipeLayout-v1.1.8.jar')
+    compile project(':okhttputil')
+    compile project(':PTRLibrary')
+    compile project(':loopview')
+    compile project(':flowlayout-lib')
     compile 'com.akexorcist:RoundCornerProgressBar:2.0.3'
 }

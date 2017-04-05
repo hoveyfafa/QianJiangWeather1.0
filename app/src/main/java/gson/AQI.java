@@ -12,5 +12,7 @@ public class AQI {
         public String aqi;
 
         public String pm25;
+//        空气质量
+        public String qlty;
     }
 }

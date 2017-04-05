@@ -18,14 +18,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.huangjiahao.qianjiangweather.MyApplication;
 import com.example.huangjiahao.qianjiangweather.R;
-import com.example.huangjiahao.qianjiangweather.activity.WeatherActivity;
 import com.example.huangjiahao.qianjiangweather.base.BaseFragment;
 import com.example.huangjiahao.qianjiangweather.service.AutoUpdateService;
 import com.example.huangjiahao.qianjiangweather.util.HttpUtil;
 import com.example.huangjiahao.qianjiangweather.util.Utility;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import gson.Forecast;
 import gson.Weather;
@@ -33,13 +35,11 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static java.lang.System.load;
-
 /**
  * Created by JH.H on 2017/3/30.
  */
 
-public class WeatherFragment extends BaseFragment {
+public class WeatherFragment extends BaseFragment implements View.OnClickListener {
     private ScrollView mSvWeatherLayout;
     private TextView mTvTitleCity;
     private TextView mTvTitleUpdateTime;
@@ -51,13 +51,13 @@ public class WeatherFragment extends BaseFragment {
     private TextView mTvComfort;
     private TextView mTvCarWash;
     private TextView mTvSport;
-    private ImageView mIvBingPic;
     public SwipeRefreshLayout swipeRefresh;
     public DrawerLayout drawerLayout;
     private Button mBtnNav;
+    private Map<String,String> params = new HashMap<>();
     @Override
     protected int setLayout() {
-        return R.layout.activity_weather;
+        return R.layout.fragment_weather;
     }
 
     @Override
@@ -74,19 +74,14 @@ public class WeatherFragment extends BaseFragment {
         mTvComfort = (TextView) view.findViewById(R.id.comfort_text);
         mTvCarWash = (TextView) view.findViewById(R.id.car_wash_text);
         mTvSport = (TextView) view.findViewById(R.id.sport_text);
-        mIvBingPic = (ImageView) view.findViewById(R.id.bing_pic_img);
+
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         drawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
         mBtnNav = (Button) view.findViewById(R.id.nav_button);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         String weatherString = prefs.getString("weather", null);
-        String bingPic = prefs.getString("bing_pic",null);
-        if (bingPic != null){
-            Glide.with(this).load(bingPic).into(mIvBingPic);
-        }else {
-            loadBingPic();
-        }
+
         final String weatherId;
         if (weatherString != null){
 //            有缓存时直接解析天气
@@ -94,7 +89,7 @@ public class WeatherFragment extends BaseFragment {
             weatherId = weather.basic.weatherId;
             showWeatherInfo(weather);
         }else {
-            weatherId = getActivity().getIntent().getStringExtra("weather_id");
+            weatherId = MyApplication.getInstance().getWeatherId();
             mSvWeatherLayout.setVisibility(View.INVISIBLE);
             requestWeather(weatherId);
         }
@@ -125,7 +120,7 @@ public class WeatherFragment extends BaseFragment {
 
     @Override
     protected void setClickEvent() {
-
+        mTvTitleCity.setOnClickListener(this);
     }
 
     public void requestWeather(final String weatherId){
@@ -164,7 +159,7 @@ public class WeatherFragment extends BaseFragment {
                 });
             }
         });
-        loadBingPic();
+
     }
 
     private void showWeatherInfo(Weather weather){
@@ -204,27 +199,8 @@ public class WeatherFragment extends BaseFragment {
         getContext().startService(intent);
     }
 
-    private void loadBingPic(){
-        String requestBingPic = "http://guolin.tech/api/bing_pic";
-        HttpUtil.sendOkHttpRequest(requestBingPic, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
+    @Override
+    public void onClick(View view) {
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String bingPic = response.body().string();
-                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
-                editor.putString("bing_pic",bingPic);
-                editor.apply();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Glide.with(getActivity()).load(bingPic).into(mIvBingPic);
-                    }
-                });
-            }
-        });
     }
 }

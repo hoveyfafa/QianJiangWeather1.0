@@ -81,4 +81,12 @@ public class MyApplication extends Application {
     public String getSignUserId(){
         return SPUtils.getString(this,"sign_user_id","");
     }
+
+//    weatherId
+    public void setWeatherId(String weatherId){
+        SPUtils.saveString(this,"weather_id",weatherId);
+    }
+    public String getWeatherId(){
+        return SPUtils.getString(this,"weather_id","");
+    }
 }
