@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.huangjiahao.qianjiangweather.MyApplication;
 import com.example.huangjiahao.qianjiangweather.R;
 import com.example.huangjiahao.qianjiangweather.activity.MainActivity;
 import com.example.huangjiahao.qianjiangweather.activity.WeatherActivity;
@@ -22,6 +23,7 @@ import com.example.huangjiahao.qianjiangweather.model.CityModel;
 import com.example.huangjiahao.qianjiangweather.model.CountyModel;
 import com.example.huangjiahao.qianjiangweather.model.ProvinceModel;
 import com.example.huangjiahao.qianjiangweather.util.HttpUtil;
+import com.example.huangjiahao.qianjiangweather.util.SPUtils;
 import com.example.huangjiahao.qianjiangweather.util.Utility;
 
 import org.litepal.crud.DataSupport;
@@ -97,17 +99,18 @@ public class ChooseAreaFragment extends Fragment {
                     queryCounties();
                 }else if (currentLevel == LEVEL_COUNTY){
                     String weatherId = countyModelList.get(position).getWeatherId();
-                    if (getActivity() instanceof MainActivity){
-                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
-                        intent.putExtra("weather_id",weatherId);
-                        startActivity(intent);
-                        getActivity().finish();
-                    }else if (getActivity() instanceof WeatherActivity){
-                        WeatherActivity  activity = (WeatherActivity) getActivity();
-                        activity.drawerLayout.closeDrawers();
-                        activity.swipeRefresh.setRefreshing(true);
-                        activity.requestWeather(weatherId);
-                    }
+//                    if (getActivity() instanceof MainActivity){
+//                        Intent intent = new Intent(getActivity(), MainActivity.class);
+//                        intent.putExtra("weather_id",weatherId);
+//                        startActivity(intent);
+//                        getActivity().finish();
+//                    }else if (getActivity() instanceof MainActivity){
+//                        MainActivity  activity = (MainActivity) getActivity();
+//                        activity.drawerLayout.closeDrawers();
+//                        activity.swipeRefresh.setRefreshing(true);
+//                        activity.requestWeather(weatherId);
+//                    }
+                    MyApplication.getInstance().setWeatherId(weatherId);
 
                 }
             }

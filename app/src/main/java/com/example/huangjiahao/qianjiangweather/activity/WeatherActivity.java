@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +61,7 @@ public class WeatherActivity extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
-        setContentView(R.layout.activity_weather);
+        setContentView(R.layout.fragment_weather);
         mSvWeatherLayout = (ScrollView) findViewById(R.id.sv_weather_layout);
         mTvTitleCity = (TextView) findViewById(R.id.title_city);
         mTvTitleUpdateTime = (TextView) findViewById(R.id.title_update_time);

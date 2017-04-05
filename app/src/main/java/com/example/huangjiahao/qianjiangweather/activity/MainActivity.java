@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.example.huangjiahao.qianjiangweather.R;
 import com.example.huangjiahao.qianjiangweather.base.BaseActivity;
-import com.example.huangjiahao.qianjiangweather.fragment.MessageFragment;
 import com.example.huangjiahao.qianjiangweather.fragment.MineFragment;
 import com.example.huangjiahao.qianjiangweather.fragment.WeatherFragment;
 import com.example.huangjiahao.qianjiangweather.util.SettingUtils;
@@ -26,22 +25,16 @@ import com.example.huangjiahao.qianjiangweather.util.Utils;
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private long mExitTime;
     private LinearLayout mTabWeather;
-    private ImageView mTabweatherImg;
-    private LinearLayout mTabInterview;
-    private ImageView mInterviewImage;
-    private LinearLayout mTabMessage;
-    private ImageView mMessageImage;
+    private ImageView mTabWeatherImg;
+
     private LinearLayout mTabMine;
     private ImageView mTabMineImg;
+
     private FragmentManager manager;
     private int mCurrentItem = -1;
     private FragmentTransaction tr;
     private WeatherFragment weatherFragment;
-    private MessageFragment messageFragment;
     private MineFragment mineFragment;
-//    private InterviewFragment interviewFragment;
-//    private MessageFragment messageFragment;
-//    private MineFragment mineFragment;
     @Override
     protected int setLayoutView() {
         return R.layout.activity_main;
@@ -50,11 +43,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void initViews() {
         mTabWeather = (LinearLayout) findViewById(R.id.tab_weather);
-        mTabweatherImg = (ImageView) findViewById(R.id.tab_weather_image);
-        mTabInterview = (LinearLayout) findViewById(R.id.tab_interview);
-        mInterviewImage = (ImageView) findViewById(R.id.tab_interview_image);
-        mTabMessage = (LinearLayout) findViewById(R.id.tab_message);
-        mMessageImage = (ImageView) findViewById(R.id.tab_message_image);
+        mTabWeatherImg = (ImageView) findViewById(R.id.tab_weather_image);
+
         mTabMine = (LinearLayout) findViewById(R.id.tab_mine);
         mTabMineImg = (ImageView) findViewById(R.id.tab_mine_image);
         selectItem(0);
@@ -69,8 +59,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void setClickEvent() {
         mTabWeather.setOnClickListener(this);
-        mTabInterview.setOnClickListener(this);
-        mTabMessage.setOnClickListener(this);
         mTabMine.setOnClickListener(this);
     }
 
@@ -86,13 +74,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             getFragment(position);
             tr.commitAllowingStateLoss();
             mTabWeather.setSelected(position == 0 ? true : false);
-            mTabweatherImg.setImageResource(position == 0 ? R.drawable.weather_selector : R.drawable.icon_weather_dibu);
-            mTabInterview.setSelected(position == 1 ? true : false);
-            mInterviewImage.setImageResource(position == 1 ? R.drawable.interview_selector : R.drawable.icon_mianshi_dibu);
-            mTabMessage.setSelected(position == 2 ? true : false);
-            mMessageImage.setImageResource(position == 2 ? R.drawable.message_selector : R.drawable.icon_xiaoxi_dibu);
-            mTabMine.setSelected(position == 3 ? true : false);
-            mTabMineImg.setImageResource(position == 3 ? R.drawable.mine_selector : R.drawable.icon_wode_dibu);
+            mTabWeatherImg.setImageResource(position == 0 ? R.drawable.weather_selector : R.drawable.icon_weather_dibu);
+            mTabMine.setSelected(position == 1 ? true : false);
+            mTabMineImg.setImageResource(position == 1 ? R.drawable.mine_selector : R.drawable.icon_wode_dibu);
 
         }
     }
@@ -106,24 +90,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     tr.show(weatherFragment);
                 }
                 break;
-//            case 1:
-//                if (interviewFragment == null) {
-//                    interviewFragment = new InterviewFragment();
-//                    tr.add(R.id.contentlayout, interviewFragment);
-//                } else {
-//                    tr.show(interviewFragment);
-//                }
-//                break;
-
-            case 2:
-                if (messageFragment == null) {
-                    messageFragment = new MessageFragment();
-                    tr.add(R.id.contentlayout, messageFragment);
-                } else {
-                    tr.show(messageFragment);
-                }
-                break;
-            case 3:
+            case 1:
                 if (mineFragment == null) {
                     mineFragment = new MineFragment();
                     tr.add(R.id.contentlayout, mineFragment);
@@ -140,15 +107,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             tr.hide(weatherFragment);
         }
         mTabWeather.setSelected(false);
-//        if (interviewFragment != null) {
-//            tr.hide(interviewFragment);
-//        }
-//        mTabInterview.setSelected(false);
-        if (messageFragment != null) {
-            tr.hide(messageFragment);
-        }
-        mTabMessage.setSelected(false);
-        if (mineFragment != null) {
+        if(mineFragment != null){
             tr.hide(mineFragment);
         }
         mTabMine.setSelected(false);
@@ -173,16 +132,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.tab_weather:
                 selectItem(0);
                 break;
-            case R.id.tab_interview:
-                selectItem(1);
-                mTabInterview.setSelected(true);
-                break;
-            case R.id.tab_message:
-                selectItem(2);
-                mTabMessage.setSelected(true);
-                break;
             case R.id.tab_mine:
-                selectItem(3);
+                selectItem(1);
                 mTabMine.setSelected(true);
                 break;
         }
@@ -201,8 +152,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
             return;
         } else {
-            String deviceid = Utils.getDeviceId(this);
-            SettingUtils.setDeciceId(MainActivity.this,deviceid);
+            String deviceId = Utils.getDeviceId(this);
+            SettingUtils.setDeciceId(MainActivity.this,deviceId);
         }
     }
     @Override
@@ -212,8 +163,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 // 如果请求被拒绝，那么通常grantResults数组为空
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    String deviceid = Utils.getDeviceId(this);
-                    SettingUtils.setDeciceId(MainActivity.this,deviceid);
+                    String deviceId = Utils.getDeviceId(this);
+                    SettingUtils.setDeciceId(MainActivity.this,deviceId);
                 } else {
                     //申请失败，可以继续向用户解释。
                     String title = "提示\n\n您拒绝了获得设备号权限,无法进行继续操作!";
