@@ -21,6 +21,10 @@ import com.bumptech.glide.Glide;
 import com.example.huangjiahao.qianjiangweather.MyApplication;
 import com.example.huangjiahao.qianjiangweather.R;
 import com.example.huangjiahao.qianjiangweather.base.BaseFragment;
+import com.example.huangjiahao.qianjiangweather.bean.WeatherBean;
+import com.example.huangjiahao.qianjiangweather.request.ProtocolHelp;
+import com.example.huangjiahao.qianjiangweather.request.ProtocolManager;
+import com.example.huangjiahao.qianjiangweather.request.RequestUrl;
 import com.example.huangjiahao.qianjiangweather.service.AutoUpdateService;
 import com.example.huangjiahao.qianjiangweather.util.HttpUtil;
 import com.example.huangjiahao.qianjiangweather.util.Utility;
@@ -54,7 +58,7 @@ public class WeatherFragment extends BaseFragment implements View.OnClickListene
     public SwipeRefreshLayout swipeRefresh;
     public DrawerLayout drawerLayout;
     private Button mBtnNav;
-    private Map<String,String> params = new HashMap<>();
+    private Map<String,String> param = new HashMap<>();
     @Override
     protected int setLayout() {
         return R.layout.fragment_weather;
@@ -203,4 +207,21 @@ public class WeatherFragment extends BaseFragment implements View.OnClickListene
     public void onClick(View view) {
 
     }
+
+    public void getWeather(){
+        param.clear();
+        param.put("city","北京");
+        ProtocolHelp.getInstance(getActivity()).protocolHelp(param, RequestUrl.WEATHER, ProtocolManager.HttpMethod.POST, WeatherBean.class, new ProtocolHelp.HttpCallBack() {
+            @Override
+            public void fail(String message) {
+
+            }
+
+            @Override
+            public void success(Object object) {
+
+            }
+        });
+    }
+
 }
