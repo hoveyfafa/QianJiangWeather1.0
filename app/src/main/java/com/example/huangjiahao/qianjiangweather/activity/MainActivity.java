@@ -35,6 +35,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private FragmentTransaction tr;
     private WeatherFragment weatherFragment;
     private MineFragment mineFragment;
+
+    private static final int READ_PHONE_STATE = 100;
+    private static final int ACCESS_COARSE_LOCATION = 101;
+    private static final int ACCESS_FINE_LOCATION = 102;
+    private static final int READ_EXTERNAL_STORAGE = 103;
+    private static final int WRITE_EXTERNAL_STORAGE = 104;
     @Override
     protected int setLayoutView() {
         return R.layout.activity_main;
@@ -48,7 +54,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mTabMine = (LinearLayout) findViewById(R.id.tab_mine);
         mTabMineImg = (ImageView) findViewById(R.id.tab_mine_image);
         selectItem(0);
-        getDeviceId();
+        getDevicePermission();
     }
 
     @Override
@@ -139,7 +145,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
-    public void getDeviceId(){
+    public void getDevicePermission(){
+//        获取手机状态权限
         if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
                     Manifest.permission.READ_PHONE_STATE)) {
@@ -147,29 +154,119 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             } else {
                 //进行权限请求
                 ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.READ_PHONE_STATE},
-                        111);
+                        new String[]{Manifest.permission.READ_PHONE_STATE},READ_PHONE_STATE);
             }
-            return;
         } else {
             String deviceId = Utils.getDeviceId(this);
             SettingUtils.setDeciceId(MainActivity.this,deviceId);
         }
+//          位置信息权限
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                Toast.makeText(MainActivity.this, "您已拒绝该权限,请到应用设置中通过权限",Toast.LENGTH_LONG).show();
+            } else {
+                //进行权限请求
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},ACCESS_COARSE_LOCATION);
+            }
+        }
+//          位置信息权限
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Toast.makeText(MainActivity.this, "您已拒绝该权限,请到应用设置中通过权限",Toast.LENGTH_LONG).show();
+            } else {
+                //进行权限请求
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},ACCESS_FINE_LOCATION);
+            }
+        }
+//          读写SD卡权限
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Toast.makeText(MainActivity.this, "您已拒绝该权限,请到应用设置中通过权限",Toast.LENGTH_LONG).show();
+            } else {
+                //进行权限请求
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},READ_EXTERNAL_STORAGE);
+            }
+        }
+//        读写SD卡权限
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Toast.makeText(MainActivity.this, "您已拒绝该权限,请到应用设置中通过权限",Toast.LENGTH_LONG).show();
+            } else {
+                //进行权限请求
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},WRITE_EXTERNAL_STORAGE);
+            }
+        }
     }
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
         switch (requestCode) {
-            case 111:
+            case READ_PHONE_STATE:
                 // 如果请求被拒绝，那么通常grantResults数组为空
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    String deviceId = Utils.getDeviceId(this);
+                    SettingUtils.setDeciceId(MainActivity.this,deviceId);
+
+                } else {
+                    //申请失败，可以继续向用户解释。
+                    String title = "提示\n\n您拒绝了权限获取,无法进行继续操作!";
+                    Toast.makeText(MainActivity.this, title,Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case ACCESS_COARSE_LOCATION:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     String deviceId = Utils.getDeviceId(this);
                     SettingUtils.setDeciceId(MainActivity.this,deviceId);
                 } else {
                     //申请失败，可以继续向用户解释。
-                    String title = "提示\n\n您拒绝了获得设备号权限,无法进行继续操作!";
+                    String title = "提示\n\n您拒绝了权限获取,无法进行继续操作!";
                     Toast.makeText(MainActivity.this, title,Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case ACCESS_FINE_LOCATION:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    String deviceId = Utils.getDeviceId(this);
+                    SettingUtils.setDeciceId(MainActivity.this,deviceId);
+                } else {
+                    //申请失败，可以继续向用户解释。
+                    String title = "提示\n\n您拒绝了权限获取,无法进行继续操作!";
+                    Toast.makeText(MainActivity.this, title,Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case READ_EXTERNAL_STORAGE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    String deviceId = Utils.getDeviceId(this);
+                    SettingUtils.setDeciceId(MainActivity.this,deviceId);
+                } else {
+                    //申请失败，可以继续向用户解释。
+                    String title = "提示\n\n您拒绝了权限获取,无法进行继续操作!";
+                    Toast.makeText(MainActivity.this, title,Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case WRITE_EXTERNAL_STORAGE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    String deviceId = Utils.getDeviceId(this);
+                    SettingUtils.setDeciceId(MainActivity.this,deviceId);
+                } else {
+                    //申请失败，可以继续向用户解释。
+                    String title = "提示\n\n您拒绝了权限获取,无法进行继续操作!";
+                    Toast.makeText(MainActivity.this, title,Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
                 break;
         }
     }
