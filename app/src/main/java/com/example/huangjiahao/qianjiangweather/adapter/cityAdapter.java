@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.huangjiahao.qianjiangweather.R;
+import com.example.huangjiahao.qianjiangweather.util.StringUtil;
 import com.example.huangjiahao.qianjiangweather.util.Utils;
 import com.example.huangjiahao.qianjiangweather.view.SlidingButtonView;
 
@@ -30,7 +31,7 @@ public class cityAdapter extends RecyclerView.Adapter<cityAdapter.MyViewHolder> 
     private SlidingButtonView mMenu = null;
 
     public cityAdapter(Context context) {
-
+        super();
         mContext = context;
         mIDeleteBtnClickListener = (IonSlidingViewClickListener) context;
 
@@ -68,7 +69,7 @@ public class cityAdapter extends RecyclerView.Adapter<cityAdapter.MyViewHolder> 
             @Override
             public void onClick(View v) {
                 int n = holder.getLayoutPosition();
-                mIDeleteBtnClickListener.onDeleteBtnCilck(v, n);
+                mIDeleteBtnClickListener.onDeleteBtnClick(v, n);
             }
         });
     }
@@ -99,7 +100,7 @@ public class cityAdapter extends RecyclerView.Adapter<cityAdapter.MyViewHolder> 
     }
 
     public void addData(int position) {
-        mDatas.add(position, "�����");
+        mDatas.add(position, "be");
         notifyItemInserted(position);
     }
 
@@ -135,7 +136,7 @@ public class cityAdapter extends RecyclerView.Adapter<cityAdapter.MyViewHolder> 
         if(mMenu != null){
             return true;
         }
-        Log.i("asd","mMenuΪnull");
+        Log.i("asd","mMenuNull");
         return false;
     }
 
@@ -143,6 +144,6 @@ public class cityAdapter extends RecyclerView.Adapter<cityAdapter.MyViewHolder> 
 
     public interface IonSlidingViewClickListener {
         void onItemClick(View view,int position);
-        void onDeleteBtnCilck(View view, int position);
+        void onDeleteBtnClick(View view, int position);
     }
 }

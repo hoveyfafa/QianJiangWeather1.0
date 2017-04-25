@@ -15,34 +15,26 @@
             android:layout_height="0dp"
             android:layout_weight="1">
             <com.example.huangjiahao.qianjiangweather.view.CircleImageView
+                android:id="@+id/circleImageView"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_marginTop="@dimen/margin_middle"
-                android:src="@drawable/icon_moren_wode"
-                app:border_width="2dp"
-                app:border_color="@color/green_color"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:id="@+id/circleImageView" />
+                android:layout_marginTop="@dimen/margin_middle"
+                android:src="@drawable/icon_moren_wode"
+                app:border_color="@color/green_color"
+                app:border_width="2dp"/>
         </RelativeLayout>
         <TextView
             android:id="@+id/tv_mine_user_name"
-            android:gravity="center"
-            android:text="请进入简历修改个人信息"
-            android:padding="@dimen/margin_tiny1"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_font_big"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/tv_mine_user_position"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="伯乐不识无名驹"
             android:padding="@dimen/margin_tiny1"
+            android:text="hovey"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_font_middle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:textSize="@dimen/text_font_big"/>
+
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"

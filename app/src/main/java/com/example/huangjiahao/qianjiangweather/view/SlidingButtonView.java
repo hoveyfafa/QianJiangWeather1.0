@@ -17,9 +17,9 @@ import com.example.huangjiahao.qianjiangweather.R;
 public class SlidingButtonView extends HorizontalScrollView {
 
     private TextView mTextView_Delete;
-
+    //    用于记录滚动条可以滚动的距离
     private int mScrollWidth;
-
+    //    自定义的接口，用于传达滑动事件
     private IonSlidingButtonListener mIonSlidingButtonListener;
 
     private Boolean isOpen = false;
@@ -56,8 +56,8 @@ public class SlidingButtonView extends HorizontalScrollView {
         super.onLayout(changed, l, t, r, b);
         if(changed){
             this.scrollTo(0,0);
-            //��ȡˮƽ���������Ի����ķ�Χ�����Ҳఴť�Ŀ��
-            mScrollWidth = mTextView_Delete.getWidth();
+            //获取水平滚动条可以滑动的范围，即右侧按钮的宽度
+            mScrollWidth = 400;
             Log.i("asd", "mScrollWidth:" + mScrollWidth);
         }
 
@@ -89,7 +89,7 @@ public class SlidingButtonView extends HorizontalScrollView {
     }
 
     /**
-     * �����������϶������жϹرջ�򿪲˵�
+     * 按滚动条被拖动距离判断关闭或打开菜单
      */
     public void changeScrollx(){
         if(getScrollX() >= (mScrollWidth/2)){
@@ -102,9 +102,7 @@ public class SlidingButtonView extends HorizontalScrollView {
         }
     }
 
-    /**
-     * �򿪲˵�
-     */
+
     public void openMenu()
     {
         if (isOpen){
@@ -115,9 +113,7 @@ public class SlidingButtonView extends HorizontalScrollView {
         mIonSlidingButtonListener.onMenuIsOpen(this);
     }
 
-    /**
-     * �رղ˵�
-     */
+
     public void closeMenu()
     {
         if (!isOpen){

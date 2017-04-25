@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.huangjiahao.qianjiangweather.R;
+import com.example.huangjiahao.qianjiangweather.adapter.cityAdapter;
 import com.example.huangjiahao.qianjiangweather.base.BaseActivity;
 import com.example.huangjiahao.qianjiangweather.fragment.MineFragment;
 import com.example.huangjiahao.qianjiangweather.fragment.WeatherFragment;
@@ -22,7 +23,7 @@ import com.example.huangjiahao.qianjiangweather.util.Utils;
 /**
  * Created by JiaHao.H on 2016/12/13.
  */
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener,cityAdapter.IonSlidingViewClickListener{
     private long mExitTime;
     private LinearLayout mTabWeather;
     private ImageView mTabWeatherImg;
@@ -41,6 +42,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final int ACCESS_FINE_LOCATION = 102;
     private static final int READ_EXTERNAL_STORAGE = 103;
     private static final int WRITE_EXTERNAL_STORAGE = 104;
+
+
     @Override
     protected int setLayoutView() {
         return R.layout.activity_main;
@@ -269,5 +272,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Utils.showToast("You choose!");
+    }
+
+    @Override
+    public void onDeleteBtnClick(View view, int position) {
+        Utils.showToast("YouChooseDelete");
+//        mCityAdapter.removeData(position);
     }
 }

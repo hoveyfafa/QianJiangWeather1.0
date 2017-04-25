@@ -8,6 +8,7 @@ import com.example.huangjiahao.qianjiangweather.base.BaseFragment;
  */
 
 public class MineFragment extends BaseFragment {
+
     @Override
     protected int setLayout() {
         return R.layout.fragment_mine;
