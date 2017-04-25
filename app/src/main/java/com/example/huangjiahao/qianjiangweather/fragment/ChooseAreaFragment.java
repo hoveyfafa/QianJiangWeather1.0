@@ -70,5 +70,5 @@ public class ChooseAreaFragment extends BaseFragment  {
 //        Utils.showToast("YouChooseDelete");
 //        mCityAdapter.removeData(position);
 //    }
-//
+
 }
