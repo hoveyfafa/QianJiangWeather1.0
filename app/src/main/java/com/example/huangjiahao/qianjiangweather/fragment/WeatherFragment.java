@@ -1,6 +1,7 @@
 package com.example.huangjiahao.qianjiangweather.fragment;
 
-import android.content.Intent;
+import android.content.Context;
+
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -9,13 +10,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -31,6 +33,7 @@ import com.example.huangjiahao.qianjiangweather.request.RequestUrl;
 
 
 import com.example.huangjiahao.qianjiangweather.util.Utils;
+import com.example.huangjiahao.qianjiangweather.view.ChangeAddressPopWindow;
 
 
 import java.util.HashMap;
@@ -43,7 +46,7 @@ import gson.Weather;
  * Created by JH.H on 2017/3/30.
  */
 
-public class WeatherFragment extends BaseFragment implements View.OnClickListener {
+public class WeatherFragment extends BaseFragment  {
     private ScrollView mSvWeatherLayout;
     private TextView mTvTitleCity;
     private TextView mTvTitleUpdateTime;
@@ -88,7 +91,30 @@ public class WeatherFragment extends BaseFragment implements View.OnClickListene
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         String weatherString = prefs.getString("weather", null);
+        mTvTitleCity.setText("江干区");
+        mTvTitleCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                ChangeAddressPopWindow mChangeAddressPooWindow = new ChangeAddressPopWindow(getActivity());
+                mChangeAddressPooWindow.setAddress("广东", "深圳", "福田区");
+                mChangeAddressPooWindow.showAtLocation(mTvTitleCity, Gravity.BOTTOM, 0, 0);
+                mChangeAddressPooWindow.setAddresskListener(new ChangeAddressPopWindow.OnAddressCListener() {
+                    @Override
+                    public void onClick(String province, String city, String area) {
+                        if (area.equals("")) {
 
+                            mTvTitleCity.setText(city);
+                        } else {
+
+                            mTvTitleCity.setText(area);
+                        }
+                    }
+                });
+
+            }
+        });
         final String weatherId;
 //        if (weatherString != null){
 ////            有缓存时直接解析天气
@@ -155,7 +181,29 @@ public class WeatherFragment extends BaseFragment implements View.OnClickListene
 
     @Override
     protected void setClickEvent() {
-        mTvTitleCity.setOnClickListener(this);
+        mTvTitleCity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                ChangeAddressPopWindow mChangeAddressPooWindow = new ChangeAddressPopWindow(getActivity());
+                mChangeAddressPooWindow.setAddress("广东", "深圳", "福田区");
+                mChangeAddressPooWindow.showAtLocation(mTvTitleCity, Gravity.BOTTOM, 0, 0);
+                mChangeAddressPooWindow.setAddresskListener(new ChangeAddressPopWindow.OnAddressCListener() {
+                    @Override
+                    public void onClick(String province, String city, String area) {
+                        if (area.equals("")) {
+
+                            mTvTitleCity.setText(city);
+                        } else {
+
+                            mTvTitleCity.setText(area);
+                        }
+                    }
+                });
+
+            }
+        });
     }
 //
 //    public void requestWeather(final String weatherId){
@@ -233,11 +281,11 @@ public class WeatherFragment extends BaseFragment implements View.OnClickListene
 //        Intent intent = new Intent(getContext(),AutoUpdateService.class);
 //        getContext().startService(intent);
     }
-
-    @Override
-    public void onClick(View view) {
-
-    }
+//
+//    @Override
+//    public void onClick(View view) {
+//
+//    }
 
     public void getWeather(){
         param.clear();
@@ -289,7 +337,8 @@ public class WeatherFragment extends BaseFragment implements View.OnClickListene
     public void getWeatherInfo() {
         param.clear();
         param.put("city",mDistract);
-        ProtocolHelp.getInstance(getActivity()).protocolHelp(param, RequestUrl.WEATHER, ProtocolManager.HttpMethod.POST, WeatherBean.class,
+        ProtocolHelp.getInstance(getActivity()).protocolHelp(param, RequestUrl.WEATHER,
+                ProtocolManager.HttpMethod.POST, WeatherBean.class,
                 new ProtocolHelp.HttpCallBack() {
                     @Override
                     public void fail(String message) {
@@ -299,6 +348,8 @@ public class WeatherFragment extends BaseFragment implements View.OnClickListene
                     @Override
                     public void success(Object object) {
 //                        显示天气状况
+                        WeatherBean data = (WeatherBean) object;
+
                     }
                 });
     }

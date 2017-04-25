@@ -39,10 +39,10 @@
             </intent-filter>
         </activity>
 
-        <!--<service-->
-            <!--android:name=".service.AutoUpdateService"-->
-            <!--android:enabled="true"-->
-            <!--android:exported="true"/>-->
+        <service
+            android:name=".service.AutoUpdateService"
+            android:enabled="true"
+            android:exported="true"/>
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="pXa17xWMqBfUiOZqI9xVbt5tVgj0Ie09"/>
