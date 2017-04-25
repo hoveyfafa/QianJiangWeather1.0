@@ -15,7 +15,8 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="#fff"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:text="城市列表"/>
         <Button
             android:id="@+id/back_button"
             android:layout_width="25dp"
@@ -26,7 +27,7 @@
             android:background="@drawable/ic_back"/>
     </RelativeLayout>
 
-    <ListView
+    <com.example.huangjiahao.qianjiangweather.view.WrapRecyclerView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
