@@ -113,7 +113,7 @@ public class ProtocolHelp {
                         }
                         if (result != null) {
                             if (httpCallBack != null) {
-                                httpCallBack.success(result);
+                                httpCallBack.success(response);
                             }
                         } else {
                             httpCallBack.fail("链接超时，请稍后重试");
@@ -143,51 +143,51 @@ public class ProtocolHelp {
      * @param httpCallBack
      * @param isList
      */
-    public void protocolHelp(Map<String, String> param, String url, ProtocolManager.HttpMethod httpMethod, final Class cla, final HttpCallBack httpCallBack, final String isList) {
-        loadingDialog.show();
-        ProtocolManager.getInstance().request(param, url, new ProtocolManager.ReponseCallback() {
-            @Override
-            public void fail(String e) {
-                Toast.makeText(MyApplication.getInstance(), e, Toast.LENGTH_SHORT).show();
-                if (httpCallBack != null) {
-                    httpCallBack.fail(e);
-                }
-                loadingDialog.dismiss();
-            }
-
-            @Override
-            public void success(String response) {
-                Log.i("request",response);
-                JSONObject objData = JsonUtils.string2JSON(response);
-                boolean bizSucc = objData.optBoolean("bizSucc");
-                if (bizSucc) {
-                    Object result = null;
-                    if (cla == null) {
-                        httpCallBack.success(response);
-                    } else {
-                        result = JsonUtils.fromJson(response, cla, isList);
-                        if (result != null) {
-                            if (httpCallBack != null) {
-                                httpCallBack.success(result);
-                            }
-                        } else {
-                            httpCallBack.fail("链接超时，请稍后重试");
-                        }
-                    }
-                } else {
-                    String errMsg = objData.optString("errMsg");
-                    if (errMsg != null) {
-                        httpCallBack.fail(errMsg);
-                    } else {
-                        httpCallBack.fail("链接超时，请稍后重试");
-                    }
-
-                }
-                loadingDialog.dismiss();
-            }
-        }, httpMethod);
-
-    }
+//    public void protocolHelp(Map<String, String> param, String url, ProtocolManager.HttpMethod httpMethod, final Class cla, final HttpCallBack httpCallBack, final String isList) {
+//        loadingDialog.show();
+//        ProtocolManager.getInstance().request(param, url, new ProtocolManager.ReponseCallback() {
+//            @Override
+//            public void fail(String e) {
+//                Toast.makeText(MyApplication.getInstance(), e, Toast.LENGTH_SHORT).show();
+//                if (httpCallBack != null) {
+//                    httpCallBack.fail(e);
+//                }
+//                loadingDialog.dismiss();
+//            }
+//
+//            @Override
+//            public void success(String response) {
+//                Log.i("request",response);
+//                JSONObject objData = JsonUtils.string2JSON(response);
+//                boolean bizSucc = objData.optBoolean("bizSucc");
+//                if (bizSucc) {
+//                    Object result = null;
+//                    if (cla == null) {
+//                        httpCallBack.success(response);
+//                    } else {
+//                        result = JsonUtils.fromJson(response, cla, isList);
+//                        if (result != null) {
+//                            if (httpCallBack != null) {
+//                                httpCallBack.success(result);
+//                            }
+//                        } else {
+//                            httpCallBack.fail("链接超时，请稍后重试");
+//                        }
+//                    }
+//                } else {
+//                    String errMsg = objData.optString("errMsg");
+//                    if (errMsg != null) {
+//                        httpCallBack.fail(errMsg);
+//                    } else {
+//                        httpCallBack.fail("链接超时，请稍后重试");
+//                    }
+//
+//                }
+//                loadingDialog.dismiss();
+//            }
+//        }, httpMethod);
+//
+//    }
     /**
      * 对象
      * @param param
@@ -212,39 +212,54 @@ public class ProtocolHelp {
             public void success(String response) {
                 Log.e("response",response);
                 JSONObject objData = JsonUtils.string2JSON(response);
-                boolean bizSucc = objData.optBoolean("bizSucc");
-                if (bizSucc) {
-                    Object result = null;
-                    if (cla == null) {
-                        httpCallBack.success(response);
-                    } else {
-                        result = JsonUtils.fromJson(response, cla);
-                        if (result != null) {
-                            if (httpCallBack != null) {
-                                httpCallBack.success(result);
-                            }
-                        } else {
-                            httpCallBack.fail("链接超时，请稍后重试");
-                        }
-                    }
-                } else {
-                    String errMsg = objData.optString("errMsg");
-                    if (errMsg != null) {
-                        httpCallBack.fail(errMsg);
-                    } else {
-                        httpCallBack.fail("链接超时，请稍后重试");
-                    }
 
-                }
+                Object result = null;
+                httpCallBack.success(response);
+//                if (cla == null) {
+//                    httpCallBack.success(response);
+//                } else {
+//                    result = JsonUtils.fromJson(response, cla);
+//                    if (result != null) {
+//                        if (httpCallBack != null) {
+//                            httpCallBack.success(result);
+//                        }
+//                    } else {
+//                        httpCallBack.fail("链接超时，请稍后重试");
+//                    }
+//                }
+//                if (bizSucc) {
+//                    Object result = null;
+//                    if (cla == null) {
+//                        httpCallBack.success(response);
+//                    } else {
+//                        result = JsonUtils.fromJson(response, cla);
+//                        if (result != null) {
+//                            if (httpCallBack != null) {
+//                                httpCallBack.success(result);
+//                            }
+//                        } else {
+//                            httpCallBack.fail("链接超时，请稍后重试");
+//                        }
+//                    }
+//                } else {
+//                    String errMsg = objData.optString("errMsg");
+//                    if (errMsg != null) {
+//                        httpCallBack.fail(errMsg);
+//                    } else {
+//                        httpCallBack.fail("链接超时，请稍后重试");
+//                    }
+//
+//                }
                 loadingDialog.dismiss();
             }
         }, httpMethod);
 
     }
+
     public interface HttpCallBack {
         void fail(String message);
 
-        void success(Object object);
+        void success(String object);
     }
 
 

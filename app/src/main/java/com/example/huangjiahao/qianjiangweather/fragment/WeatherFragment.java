@@ -15,9 +15,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -26,17 +28,28 @@ import com.baidu.location.LocationClientOption;
 
 import com.example.huangjiahao.qianjiangweather.R;
 import com.example.huangjiahao.qianjiangweather.base.BaseFragment;
+import com.example.huangjiahao.qianjiangweather.bean.CondBean;
+import com.example.huangjiahao.qianjiangweather.bean.DailyForecastBean;
+
 import com.example.huangjiahao.qianjiangweather.bean.WeatherBean;
 import com.example.huangjiahao.qianjiangweather.request.ProtocolHelp;
 import com.example.huangjiahao.qianjiangweather.request.ProtocolManager;
 import com.example.huangjiahao.qianjiangweather.request.RequestUrl;
 
 
+import com.example.huangjiahao.qianjiangweather.util.JsonUtils;
 import com.example.huangjiahao.qianjiangweather.util.Utils;
 import com.example.huangjiahao.qianjiangweather.view.ChangeAddressPopWindow;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import gson.Forecast;
@@ -58,6 +71,7 @@ public class WeatherFragment extends BaseFragment  {
     private TextView mTvComfort;
     private TextView mTvCarWash;
     private TextView mTvSport;
+    private ImageView mIvWeatherIcon;
     private SwipeRefreshLayout swipeRefresh;
     private DrawerLayout drawerLayout;
     private Button mBtnNav;
@@ -65,6 +79,10 @@ public class WeatherFragment extends BaseFragment  {
     private LocationClient mLocationClient = null;
     private BDLocationListener myListener ;
     private  String mDistract = "朝阳区";
+
+
+//    private WeatherBean weatherBean ;
+
     @Override
     protected int setLayout() {
         return R.layout.fragment_weather;
@@ -84,6 +102,7 @@ public class WeatherFragment extends BaseFragment  {
         mTvComfort = (TextView) view.findViewById(R.id.comfort_text);
         mTvCarWash = (TextView) view.findViewById(R.id.car_wash_text);
         mTvSport = (TextView) view.findViewById(R.id.sport_text);
+        mIvWeatherIcon = (ImageView) view.findViewById(R.id.iv_weather_icon);
 
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         drawerLayout = (DrawerLayout) view.findViewById(R.id.drawer_layout);
@@ -245,35 +264,35 @@ public class WeatherFragment extends BaseFragment  {
 //
 //    }
 
-    private void showWeatherInfo(Weather weather){
-        String cityName = weather.basic.cityName;
-        String updateTime = weather.basic.update.updateTime.split(" ")[1];
-        String degree = weather.now.temperature + "℃";
-        String weatherInfo = weather.now.more.info;
+    private void showWeatherInfo(WeatherBean weather){
+        String cityName = weather.basic.city;
+        String updateTime = weather.basic.update.loc.split(" ")[1];
+        String degree = weather.now.tmp + "℃";
+        String weatherInfo = weather.now.cond.txt;
 //        mTvTitleCity.setText(cityName);
         mTvTitleUpdateTime.setText(updateTime);
         mTvDegree.setText(degree);
         mTvWeatherInfoLayout.setText(weatherInfo);
         mLlForecast.removeAllViews();
-        for (Forecast forecast : weather.forecastList) {
+        for (DailyForecastBean forecast : weather.daily_forecast) {
             View view = LayoutInflater.from(getContext()).inflate(R.layout.forecast_item, mLlForecast, false);
             TextView dateText = (TextView) view.findViewById(R.id.date_text);
             TextView infoText = (TextView) view.findViewById(R.id.info_text);
             TextView maxText = (TextView) view.findViewById(R.id.max_text);
             TextView minText = (TextView) view.findViewById(R.id.min_text);
             dateText.setText(forecast.date);
-            infoText.setText(forecast.more.info);
-            maxText.setText(forecast.temperature.max);
-            minText.setText(forecast.temperature.min+"℃");
+            infoText.setText(forecast.cond.txt);
+            maxText.setText(forecast.tmp.max);
+            minText.setText(forecast.tmp.min+"℃");
             mLlForecast.addView(view);
         }
         if (weather.aqi != null) {
             mTvAQI.setText(weather.aqi.city.aqi);
             mTvPM25.setText(weather.aqi.city.pm25);
         }
-        String comfort = "舒适度" + weather.suggestion.comfort.info;
-        String carWash = "洗车指数" + weather.suggestion.carWash.info;
-        String sport = "运动建议" + weather.suggestion.sport.info;
+        String comfort = "舒适度" + weather.suggestion.comf.brf;
+        String carWash = "洗车指数" + weather.suggestion.comf.brf;
+        String sport = "运动建议" + weather.suggestion.sport.brf;
         mTvComfort.setText(comfort);
         mTvCarWash.setText(carWash);
         mTvSport.setText(sport);
@@ -287,23 +306,23 @@ public class WeatherFragment extends BaseFragment  {
 //
 //    }
 
-    public void getWeather(){
-        param.clear();
-        param.put("city",mTvTitleCity.toString());
-        ProtocolHelp.getInstance(getActivity()).protocolHelp(param, RequestUrl.WEATHER,
-                ProtocolManager.HttpMethod.POST,
-                WeatherBean.class, new ProtocolHelp.HttpCallBack() {
-            @Override
-            public void fail(String message) {
-
-            }
-
-            @Override
-            public void success(Object object) {
-
-            }
-        });
-    }
+//    public void getWeather(){
+//        param.clear();
+//        param.put("city",mTvTitleCity.toString());
+//        ProtocolHelp.getInstance(getActivity()).protocolHelp(param, RequestUrl.WEATHER,
+//                ProtocolManager.HttpMethod.POST,
+//                WeatherBean.class, new ProtocolHelp.HttpCallBack() {
+//            @Override
+//            public void fail(String message) {
+//
+//            }
+//
+//            @Override
+//            public void success(Object object) {
+//
+//            }
+//        });
+//    }
 
 
     private class MyLocationListener implements BDLocationListener {
@@ -342,14 +361,34 @@ public class WeatherFragment extends BaseFragment  {
                 new ProtocolHelp.HttpCallBack() {
                     @Override
                     public void fail(String message) {
-                        Utils.showToast(message);
+                        Toast.makeText(getContext(),"获取天气信息失败", Toast.LENGTH_SHORT).show();
+                        swipeRefresh.setRefreshing(false);
                     }
 
                     @Override
-                    public void success(Object object) {
-//                        显示天气状况
-                        WeatherBean data = (WeatherBean) object;
+                    public void success(String object) {
+                        Gson gson = new Gson();
 
+                        try {
+                            JSONObject jsonObject = new JSONObject(object);
+                            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather5");
+                            String weatherContent = jsonArray.getJSONObject(0).toString();
+                            WeatherBean bean = gson.fromJson(weatherContent, WeatherBean.class);
+                            mIvWeatherIcon.getDrawable().setLevel(Integer.parseInt(bean.now.cond.code));
+                            showWeatherInfo(bean);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        Log.i("weather-code","------"+object+"--------");
+//                        WeatherBean data = gson.fromJson(object,WeatherBean.class);
+//                        显示天气状况
+//                        WeatherBean data = (WeatherBean) object;
+////                        WeatherBean data = gson.fromJson(object,WeatherBean.class);
+////                        List<DailyForecastBean> dailyForecastBeen = data.daily_forecast;
+//                        Log.i("weather-code","------"+data.now.cond.code+"--------");
+
+//                        int code = Integer.parseInt(data.now.cond.code);
+//                        Log.i("weather-code","------"+code+"--------");
                     }
                 });
     }

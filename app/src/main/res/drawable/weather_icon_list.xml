@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:maxLevel="100" android:drawable="@drawable/w100"/>
+    <item android:maxLevel="101" android:drawable="@drawable/w101"/>
+    <item android:maxLevel="102" android:drawable="@drawable/w102"/>
+    <item android:maxLevel="103" android:drawable="@drawable/w103"/>
+    <item android:maxLevel="104" android:drawable="@drawable/w104"/>
+
+    <item android:maxLevel="200" android:drawable="@drawable/w200"/>
+    <item android:maxLevel="201" android:drawable="@drawable/w201"/>
+    <item android:maxLevel="202" android:drawable="@drawable/w202"/>
+    <item android:maxLevel="203" android:drawable="@drawable/w203"/>
+    <item android:maxLevel="204" android:drawable="@drawable/w204"/>
+    <item android:maxLevel="205" android:drawable="@drawable/w205"/>
+    <item android:maxLevel="206" android:drawable="@drawable/w206"/>
+    <item android:maxLevel="207" android:drawable="@drawable/w207"/>
+    <item android:maxLevel="208" android:drawable="@drawable/w208"/>
+    <item android:maxLevel="209" android:drawable="@drawable/w209"/>
+    <item android:maxLevel="210" android:drawable="@drawable/w210"/>
+    <item android:maxLevel="211" android:drawable="@drawable/w211"/>
+    <item android:maxLevel="212" android:drawable="@drawable/w212"/>
+    <item android:maxLevel="213" android:drawable="@drawable/w213"/>
+
+    <item android:maxLevel="300" android:drawable="@drawable/w300"/>
+    <item android:maxLevel="301" android:drawable="@drawable/w301"/>
+    <item android:maxLevel="302" android:drawable="@drawable/w302"/>
+    <item android:maxLevel="303" android:drawable="@drawable/w303"/>
+    <item android:maxLevel="304" android:drawable="@drawable/w304"/>
+    <item android:maxLevel="305" android:drawable="@drawable/w305"/>
+    <item android:maxLevel="306" android:drawable="@drawable/w306"/>
+    <item android:maxLevel="307" android:drawable="@drawable/w307"/>
+    <item android:maxLevel="308" android:drawable="@drawable/w308"/>
+    <item android:maxLevel="309" android:drawable="@drawable/w309"/>
+    <item android:maxLevel="310" android:drawable="@drawable/w310"/>
+    <item android:maxLevel="311" android:drawable="@drawable/w311"/>
+    <item android:maxLevel="312" android:drawable="@drawable/w312"/>
+    <item android:maxLevel="313" android:drawable="@drawable/w313"/>
+
+    <item android:maxLevel="400" android:drawable="@drawable/w400"/>
+    <item android:maxLevel="401" android:drawable="@drawable/w401"/>
+    <item android:maxLevel="402" android:drawable="@drawable/w402"/>
+    <item android:maxLevel="403" android:drawable="@drawable/w403"/>
+    <item android:maxLevel="404" android:drawable="@drawable/w404"/>
+    <item android:maxLevel="405" android:drawable="@drawable/w405"/>
+    <item android:maxLevel="406" android:drawable="@drawable/w406"/>
+    <item android:maxLevel="407" android:drawable="@drawable/w407"/>
+
+    <item android:maxLevel="500" android:drawable="@drawable/w500"/>
+    <item android:maxLevel="501" android:drawable="@drawable/w501"/>
+    <item android:maxLevel="502" android:drawable="@drawable/w502"/>
+    <item android:maxLevel="503" android:drawable="@drawable/w503"/>
+    <item android:maxLevel="504" android:drawable="@drawable/w504"/>
+    <item android:maxLevel="507" android:drawable="@drawable/w507"/>
+    <item android:maxLevel="508" android:drawable="@drawable/w508"/>
+
+    <item android:maxLevel="900" android:drawable="@drawable/w900"/>
+    <item android:maxLevel="901" android:drawable="@drawable/w901"/>
+    <item android:maxLevel="999" android:drawable="@drawable/w999"/>
+</level-list>

@@ -88,11 +88,11 @@ public class ProtocolManager {
 
                     @Override
                     public void onResponse(String response) {
-                        if (response.indexOf("Exception") > 0 || response.indexOf("exception") > 0) {
-                            reponseCallback.fail("链接超时，请稍后重试");
-                        } else {
+//                        if (response.indexOf("Exception") > 0 || response.indexOf("exception") > 0) {
+//                            reponseCallback.fail("链接超时，请稍后重试");
+//                        } else {
                             reponseCallback.success(response);
-                        }
+//                        }
                     }
                 });
     }
