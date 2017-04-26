@@ -128,14 +128,14 @@ public class WeatherFragment extends BaseFragment  {
 //            mSvWeatherLayout.setVisibility(View.INVISIBLE);
 //            requestWeather(weatherId);
 //        }
-
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-//                requestWeather(weatherId);
-                getWeatherInfo();
-            }
-        });
+        getWeatherInfo();
+//        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+////                requestWeather(weatherId);
+//                getWeatherInfo();
+//            }
+//        });
         mBtnNav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -336,7 +336,7 @@ public class WeatherFragment extends BaseFragment  {
 
     public void getWeatherInfo() {
         param.clear();
-        param.put("city",mDistract);
+        param.put("city","杭州");
         ProtocolHelp.getInstance(getActivity()).protocolHelp(param, RequestUrl.WEATHER,
                 ProtocolManager.HttpMethod.POST, WeatherBean.class,
                 new ProtocolHelp.HttpCallBack() {

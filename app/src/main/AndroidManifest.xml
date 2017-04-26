@@ -39,6 +39,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.WelcomeActivity"
+                  android:screenOrientation="portrait"/>
+
         <service
             android:name=".service.AutoUpdateService"
             android:enabled="true"
