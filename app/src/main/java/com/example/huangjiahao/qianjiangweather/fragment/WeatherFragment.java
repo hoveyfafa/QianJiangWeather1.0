@@ -2,6 +2,7 @@ package com.example.huangjiahao.qianjiangweather.fragment;
 
 import android.content.Context;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -26,6 +28,7 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 
+import com.example.huangjiahao.qianjiangweather.MyApplication;
 import com.example.huangjiahao.qianjiangweather.R;
 import com.example.huangjiahao.qianjiangweather.base.BaseFragment;
 import com.example.huangjiahao.qianjiangweather.bean.CondBean;
@@ -37,6 +40,7 @@ import com.example.huangjiahao.qianjiangweather.request.ProtocolManager;
 import com.example.huangjiahao.qianjiangweather.request.RequestUrl;
 
 
+import com.example.huangjiahao.qianjiangweather.service.AutoUpdateService;
 import com.example.huangjiahao.qianjiangweather.util.JsonUtils;
 import com.example.huangjiahao.qianjiangweather.util.Utils;
 import com.example.huangjiahao.qianjiangweather.view.ChangeAddressPopWindow;
@@ -60,6 +64,7 @@ import gson.Weather;
  */
 
 public class WeatherFragment extends BaseFragment  {
+    private FrameLayout mFlMain;
     private ScrollView mSvWeatherLayout;
     private TextView mTvTitleCity;
     private TextView mTvTitleUpdateTime;
@@ -68,9 +73,9 @@ public class WeatherFragment extends BaseFragment  {
     private LinearLayout mLlForecast;
     private TextView mTvAQI;
     private TextView mTvPM25;
-    private TextView mTvComfort;
-    private TextView mTvCarWash;
-    private TextView mTvSport;
+    private TextView mTvComfort,mTvComfortTxt;
+    private TextView mTvCarWash,mTvCarWashTxt;
+    private TextView mTvSport,mTvSportTxt;
     private ImageView mIvWeatherIcon;
     private SwipeRefreshLayout swipeRefresh;
     private DrawerLayout drawerLayout;
@@ -80,7 +85,7 @@ public class WeatherFragment extends BaseFragment  {
     private BDLocationListener myListener ;
     private  String mDistract = "朝阳区";
 
-
+    private String result;
 //    private WeatherBean weatherBean ;
 
     @Override
@@ -91,6 +96,7 @@ public class WeatherFragment extends BaseFragment  {
     @Override
     protected void initViews() {
 
+        mFlMain = (FrameLayout) view.findViewById(R.id.fl_main);
         mSvWeatherLayout = (ScrollView) view.findViewById(R.id.sv_weather_layout);
         mTvTitleCity = (TextView) view.findViewById(R.id.title_city);
         mTvTitleUpdateTime = (TextView) view.findViewById(R.id.title_update_time);
@@ -100,8 +106,11 @@ public class WeatherFragment extends BaseFragment  {
         mTvAQI = (TextView) view.findViewById(R.id.aqi_text);
         mTvPM25 = (TextView) view.findViewById(R.id.pm25_text);
         mTvComfort = (TextView) view.findViewById(R.id.comfort_text);
+        mTvComfortTxt = (TextView) view.findViewById(R.id.comfort_text_suggestion);
         mTvCarWash = (TextView) view.findViewById(R.id.car_wash_text);
+        mTvCarWashTxt = (TextView) view.findViewById(R.id.car_wash_text_suggestion);
         mTvSport = (TextView) view.findViewById(R.id.sport_text);
+        mTvSportTxt = (TextView) view.findViewById(R.id.sport_text_suggestion);
         mIvWeatherIcon = (ImageView) view.findViewById(R.id.iv_weather_icon);
 
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
@@ -135,26 +144,26 @@ public class WeatherFragment extends BaseFragment  {
             }
         });
         final String weatherId;
-//        if (weatherString != null){
-////            有缓存时直接解析天气
-//            Weather weather = Utility.handleWeatherResponse(weatherString);
-//            weatherId = weather.basic.weatherId;
-//            showWeatherInfo(weather);
-//        }else {
-////            weatherId = MyApplication.getInstance().getWeatherId();
-////            weatherId = getActivity().getIntent().getStringExtra("weather_id");
+        if (weatherString != null){
+//            有缓存时直接解析天气
+            WeatherBean weather = Utils.handleWeatherResponse(weatherString);
+//            weatherId = weather.basic.id;
+            showWeatherInfo(weather);
+        }else {
+//            weatherId = MyApplication.getInstance().getWeatherId();
+//            weatherId = getActivity().getIntent().getStringExtra("weather_id");
 //            weatherId = "CN101190401";
-//            mSvWeatherLayout.setVisibility(View.INVISIBLE);
-//            requestWeather(weatherId);
-//        }
-        getWeatherInfo();
-//        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-////                requestWeather(weatherId);
-//                getWeatherInfo();
-//            }
-//        });
+            mSvWeatherLayout.setVisibility(View.INVISIBLE);
+            getWeatherInfo(mDistract);
+        }
+//        getWeatherInfo();
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+//                requestWeather(weatherId);
+                getWeatherInfo(mDistract);
+            }
+        });
         mBtnNav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -214,8 +223,9 @@ public class WeatherFragment extends BaseFragment  {
                         if (area.equals("")) {
 
                             mTvTitleCity.setText(city);
+                            mDistract = city;
                         } else {
-
+                            mDistract = city;
                             mTvTitleCity.setText(area);
                         }
                     }
@@ -269,7 +279,7 @@ public class WeatherFragment extends BaseFragment  {
         String updateTime = weather.basic.update.loc.split(" ")[1];
         String degree = weather.now.tmp + "℃";
         String weatherInfo = weather.now.cond.txt;
-//        mTvTitleCity.setText(cityName);
+        mTvTitleCity.setText(cityName);
         mTvTitleUpdateTime.setText(updateTime);
         mTvDegree.setText(degree);
         mTvWeatherInfoLayout.setText(weatherInfo);
@@ -282,46 +292,41 @@ public class WeatherFragment extends BaseFragment  {
             TextView minText = (TextView) view.findViewById(R.id.min_text);
             dateText.setText(forecast.date);
             infoText.setText(forecast.cond.txt);
-            maxText.setText(forecast.tmp.max);
-            minText.setText(forecast.tmp.min+"℃");
+            maxText.setText(forecast.tmp.max+"℃");
+            minText.setText(forecast.tmp.min);
             mLlForecast.addView(view);
         }
         if (weather.aqi != null) {
             mTvAQI.setText(weather.aqi.city.aqi);
             mTvPM25.setText(weather.aqi.city.pm25);
         }
-        String comfort = "舒适度" + weather.suggestion.comf.brf;
-        String carWash = "洗车指数" + weather.suggestion.comf.brf;
-        String sport = "运动建议" + weather.suggestion.sport.brf;
+        String comfort = "舒适度   " + weather.suggestion.comf.brf;
+        String carWash = "洗车指数  " + weather.suggestion.cw.brf;
+        String sport = "运动建议    " + weather.suggestion.sport.brf;
+        String comfortTxt = weather.suggestion.comf.txt;
+        String carWashTxt = weather.suggestion.cw.txt;
+        String sportTxt = weather.suggestion.sport.txt;
         mTvComfort.setText(comfort);
         mTvCarWash.setText(carWash);
         mTvSport.setText(sport);
+        mTvComfortTxt.setText(comfortTxt);
+        mTvCarWashTxt.setText(carWashTxt);
+        mTvSportTxt.setText(sportTxt);
+        int id = getResources().getIdentifier("w"+weather.now.cond.code,"drawable","com.example.huangjiahao.qianjiangweather");
+        mIvWeatherIcon.setImageResource(id);
+        if (weather.now.cond.code.equals("100")){
+            mFlMain.setBackgroundColor(getResources().getColor(R.color.good_weather));
+        }else {
+            mFlMain.setBackgroundColor(getResources().getColor(R.color.bad_weather));
+        }
         mSvWeatherLayout.setVisibility(View.VISIBLE);
-//        Intent intent = new Intent(getContext(),AutoUpdateService.class);
-//        getContext().startService(intent);
+        Intent intent = new Intent(getContext(),AutoUpdateService.class);
+        getContext().startService(intent);
     }
 //
 //    @Override
 //    public void onClick(View view) {
 //
-//    }
-
-//    public void getWeather(){
-//        param.clear();
-//        param.put("city",mTvTitleCity.toString());
-//        ProtocolHelp.getInstance(getActivity()).protocolHelp(param, RequestUrl.WEATHER,
-//                ProtocolManager.HttpMethod.POST,
-//                WeatherBean.class, new ProtocolHelp.HttpCallBack() {
-//            @Override
-//            public void fail(String message) {
-//
-//            }
-//
-//            @Override
-//            public void success(Object object) {
-//
-//            }
-//        });
 //    }
 
 
@@ -353,33 +358,51 @@ public class WeatherFragment extends BaseFragment  {
         }
     }
 
-    public void getWeatherInfo() {
+    public void getWeatherInfo(final String city) {
+
         param.clear();
-        param.put("city","杭州");
+        param.put("city",city);
         ProtocolHelp.getInstance(getActivity()).protocolHelp(param, RequestUrl.WEATHER,
                 ProtocolManager.HttpMethod.POST, WeatherBean.class,
                 new ProtocolHelp.HttpCallBack() {
                     @Override
                     public void fail(String message) {
-                        Toast.makeText(getContext(),"获取天气信息失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),"a获取天气信息失败", Toast.LENGTH_SHORT).show();
                         swipeRefresh.setRefreshing(false);
                     }
-
                     @Override
                     public void success(String object) {
-                        Gson gson = new Gson();
 
-                        try {
-                            JSONObject jsonObject = new JSONObject(object);
-                            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather5");
-                            String weatherContent = jsonArray.getJSONObject(0).toString();
-                            WeatherBean bean = gson.fromJson(weatherContent, WeatherBean.class);
-                            mIvWeatherIcon.getDrawable().setLevel(Integer.parseInt(bean.now.cond.code));
-                            showWeatherInfo(bean);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        Log.i("weather-code","------"+object+"--------");
+                        result = object;
+                        final WeatherBean weatherBean = Utils.handleWeatherResponse(result);
+                        getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (weatherBean != null){
+                                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getContext()).edit();
+                                editor.putString("weather",result);
+                                editor.apply();
+                                showWeatherInfo(weatherBean);
+                            }else {
+                                Toast.makeText(getContext(),"b获取天气信息失败",Toast.LENGTH_SHORT).show();
+                            }
+                            swipeRefresh.setRefreshing(false);
+                    }
+                });
+            }
+//                        Gson gson = new Gson();
+//
+//                        try {
+//                            JSONObject jsonObject = new JSONObject(object);
+//                            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather5");
+//                            String weatherContent = jsonArray.getJSONObject(0).toString();
+//                            WeatherBean bean = gson.fromJson(weatherContent, WeatherBean.class);
+//                            mIvWeatherIcon.getDrawable().setLevel(Integer.parseInt(bean.now.cond.code));
+//                            showWeatherInfo(bean);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                        Log.i("weather-code","------"+object+"--------");
 //                        WeatherBean data = gson.fromJson(object,WeatherBean.class);
 //                        显示天气状况
 //                        WeatherBean data = (WeatherBean) object;
@@ -389,7 +412,7 @@ public class WeatherFragment extends BaseFragment  {
 
 //                        int code = Integer.parseInt(data.now.cond.code);
 //                        Log.i("weather-code","------"+code+"--------");
-                    }
+
                 });
     }
 

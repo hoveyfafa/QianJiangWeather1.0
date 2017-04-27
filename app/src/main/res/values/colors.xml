@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimary">#8DEEEE</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#15d4c4</color>
     <color name="black">#000000</color>
@@ -23,4 +23,7 @@
     <color name="background_color">#f5fafa</color>
     <color name="green2_color">#0abfb0</color>
     <color name="light_blue">#92B8F4</color>
+
+    <color name="good_weather">#FFFACD</color>
+    <color name="bad_weather">#DBDBDB</color>
 </resources>
